@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.23'
 
       - name: Run tests
         run: go test -v ./...
@@ -51,10 +51,10 @@ jobs:
           context: .
           push: true
           tags: |
-            testing/welcome:latest
-            testing/welcome:${{ github.event.inputs.release_tag }}
-          cache-from: type=registry,ref=testing/welcome:buildcache
-          cache-to: type=registry,ref=testing/welcome:buildcache,mode=max
+            ${{ secrets.DOCKERHUB_USERNAME }}/welcome:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/welcome:${{ github.event.inputs.release_tag }}
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/welcome:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/welcome:buildcache,mode=max
 
   deploy:
     needs: build-and-push
@@ -70,5 +70,5 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl set image deployment/welcome-app welcome-app=testing/welcome:${{ github.event.inputs.release_tag }}
+          kubectl set image deployment/welcome-app welcome-app=${{ secrets.DOCKERHUB_USERNAME }}/welcome:${{ github.event.inputs.release_tag }}
           kubectl rollout status deployment/welcome-app
