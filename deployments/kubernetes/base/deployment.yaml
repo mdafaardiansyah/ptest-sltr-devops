@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: welcome-app
+  namespace: default
+  labels:
+    app: welcome-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: welcome-app
+  template:
+    metadata:
+      labels:
+        app: welcome-app
+    spec:
+      containers:
+        - name: welcome-app
+          image: ardidafa/welcome:latest
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: welcome-config
+            - secretRef:
+                name: welcome-secret
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /welcome/health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /welcome/health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
