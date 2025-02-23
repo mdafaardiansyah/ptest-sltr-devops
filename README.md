@@ -99,7 +99,7 @@ Aplikasi ini memiliki beberapa endpoint:
       > Selamat datang Muhammad_Dafa_Ardiansyah
       
       Real URL Deployment:
-      - curl https://welcome.ardidafa.glanze.site/Muhammad_Dafa_Ardiansyah
+      - curl https://welcome.ardidafa.glanze.site/welcome/Muhammad_Dafa_Ardiansyah
       > Selamat datang Muhammad_Dafa_Ardiansyah
  
       # Tanpa nama
@@ -108,7 +108,7 @@ Aplikasi ini memiliki beberapa endpoint:
       > Anonymous
       
       Real URL Deployment:
-      - curl https://welcome.ardidafa.glanze.site/
+      - curl https://welcome.ardidafa.glanze.site/welcome
       > Anonymous
       ```
 
