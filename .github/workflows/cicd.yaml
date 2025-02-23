@@ -1,5 +1,4 @@
 name: CI/CD Pipeline WelcomeApps
-
 on:
   workflow_dispatch:
     inputs:
@@ -44,10 +43,23 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
-      - name: Deploy to Kubernetes
+      - name: Wait for API server
+        run: |
+          timeout 60s bash -c 'until kubectl cluster-info; do sleep 5; done'
+
+      - name: Apply Kubernetes manifests
+        run: |
+          cd deployments/kubernetes/base
+          kubectl apply -f configmap.yaml
+          kubectl apply -f secret.yaml
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
+          kubectl apply -f ingress.yaml
+
+      - name: Update deployment image
         run: |
           kubectl set image deployment/welcome-app welcome-app=${{ secrets.DOCKERHUB_USERNAME }}/welcome:${{ github.event.inputs.release_tag }}
-          kubectl rollout status deployment/welcome-app
+          kubectl rollout status deployment/welcome-app --timeout=120s
 
       - name: Verify Deployment
         run: |
