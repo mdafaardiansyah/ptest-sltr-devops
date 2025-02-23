@@ -4,8 +4,12 @@ metadata:
   name: welcome-app
   namespace: welcome-app
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:
+    - hosts:
+        - welcome.ardidafa.glanze.site
+      secretName: welcome-tls
   rules:
     - host: welcome.ardidafa.glanze.site
       http:

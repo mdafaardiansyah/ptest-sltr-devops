@@ -6,9 +6,4 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-
-namespace: default
-
-commonLabels:
-  app: welcome-app
-  environment: base
+  - cluster-issuer.yaml
