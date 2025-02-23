@@ -1,16 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: welcome-ingress
+  name: welcome-app
+  namespace: welcome-app
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: "nginx"
-  tls:
-    - hosts:
-        - welcome.ardidafa.glanze.site
-      secretName: welcome-tls
   rules:
     - host: welcome.ardidafa.glanze.site
       http:
@@ -19,6 +14,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: welcome-service
+                name: welcome-app
                 port:
                   number: 80
